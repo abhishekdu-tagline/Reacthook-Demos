@@ -29,11 +29,12 @@ const DisplayUsers = (props) => {
     getallUsers();
   }, []);
 
-  const deleteUser = (id) => {
-    axios
-      .delete(`http://localhost:3000/users/${id}`)
-      .then((res) => console.log("Deleted", res))
-      .catch((err) => console.error(err));
+  const deleteUser = async (id) => {
+    const response = await axios.delete(`http://localhost:3000/users/${id}`);
+
+    // .delete(`http://localhost:3000/users/${id}`)
+    // .then((res) => console.log("Deleted", res))
+    // .catch((err) => console.error(err));
   };
 
   /// Store User data in State Variable
@@ -45,7 +46,7 @@ const DisplayUsers = (props) => {
   //         </tr>
   //   })
 
-  //   console.log("Data Fetch in Display User Component", userData);
+  console.log("Data Fetch in Display User Component", props);
   return (
     <>
       <table border="1">
@@ -57,31 +58,17 @@ const DisplayUsers = (props) => {
           </tr>
         </thead>
         <tbody>
-          {/* {props.userValues.map(user => (
-                     <tr>
-                           <td>{user.name}</td>
-                           <td>{user.email}</td>
-                           <rd><button type="button" onClick={deleteUser}>delete</button></rd>
-                     </tr>
-               ))}   */}
-
-          {userData !== null &&
-            userData.map((user) => (
-              <tr>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      deleteUser(user.id);
-                    }}
-                  >
-                    delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+          {props.userValues.map((user) => (
+            <tr>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <rd>
+                <button type="button" onClick={deleteUser}>
+                  delete
+                </button>
+              </rd>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

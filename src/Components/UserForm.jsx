@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import DisplayUsers from "./DisplayUsers";
 
 export const UserForm = () => {
@@ -8,8 +9,19 @@ export const UserForm = () => {
     name: "",
     email: "",
   });
-
   const [userInfo, setUserInfo] = useState([]);
+
+   useEffect(() => {
+    axios
+      .get("http://localhost:3000/users")
+      .then((response) => {
+        //   console.log("Response is Displayed", response);
+        setUserInfo(response.data);
+      })
+      .catch((error) => {
+        console.log("Error is", error);
+      });
+  }, []);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -31,7 +43,7 @@ export const UserForm = () => {
   };
 
   //   console.log("User Form Object is now " + JSON.stringify(userDetail));
-//   console.log("User Form Data Array is now " + JSON.stringify(userInfo));
+  //   console.log("User Form Data Array is now " + JSON.stringify(userInfo));
   return (
     <>
       <from>
