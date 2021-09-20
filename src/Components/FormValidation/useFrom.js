@@ -1,32 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-
-const useForm = (login , validate) => {
+const useForm = (addUser, validate) => {
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
-  const [userData, setUserData] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(errors).length === 0 && isSubmitting) {
+      addUser();
+    }
+  }, [errors]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors(validate(values));
-    // if (Object.keys(errors).length === 0 )  {
-    //   setUserData([...userData, values]);
-    // } else {
-    //     e.preventDefault()
-    // }
+    setIsSubmitting(true);
   };
-  console.log("SetError return Error Object", errors);
-  console.log(" Ather Perform Validation is Array Contain Data is", userData);
+  // console.log("SetError return Error Object", errors);
 
+  /// Handle Change of File Handle Change
+  const fileHandleChange = (e) => {
+    const { name } = e.target;
+    const filesData = e.target.files[0];
+    setValues({ ...values, [name]: filesData });
+  //   console.log("State Variable Data inside fileHandleChange", values);
+   };
+
+  //// handleChange function
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log("The name and value is " + name + " and " + value);
-
+    // console.log("<----- FileData is ------->", fileData);
     setValues({ ...values, [name]: value });
   };
+  // console.log("State Variable  Data  outside fileHandleChange", values);
 
-  return { handleChange, handleSubmit, values, errors, userData };
+  return { handleChange, handleSubmit, fileHandleChange, values, errors };
 };
 
 export default useForm;

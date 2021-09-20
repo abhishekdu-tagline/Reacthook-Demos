@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import validate from "./LoginFormValidation";
 import useForm from "./useFrom";
 
 export const Form = () => {
-  const { handleChange, handleSubmit, values, errors, userData } = useForm(login , validate);
+  const { handleChange, handleSubmit, fileHandleChange, values, errors } =
+    useForm(addUser, validate);
+  const [userData, setUserData] = useState([]);
 
-  function login() {
+  function addUser() {
     console.log("No errors, submit callback called!");
+    setUserData([...userData, values]);
   }
 
   // console.log("Value is" , values);
+  // console.log("UserData is" , userData);
   console.log("Ther Error Object  is Contains", errors);
   return (
     <>
@@ -24,7 +28,7 @@ export const Form = () => {
         />{" "}
         <br /> <br />
         {errors.email && <p>{errors.email}</p>}
-        {/* <label>PassWord</label>
+        <label>PassWord</label>
         <input
           autoComplete="password"
           type="password"
@@ -33,8 +37,23 @@ export const Form = () => {
           value={values.password || ""}
         />
         <br /> <br />
-        {errors.password && <p>{errors.password}</p>} */}
-      
+        {errors.password && <p>{errors.password}</p>}
+        <lable> Phone Number: </lable>
+        <input
+          type="number"
+          name="phone"
+          value={values.phone || ""}
+          onChange={handleChange}
+        />{" "}
+        <br /> <br />
+        {errors.phone && <p>{errors.phone}</p>}
+        <label>Profile Picture</label>
+        <input
+          type="file"
+          name="picture"
+          onChange={fileHandleChange}
+        /> <br /> <br />
+        {errors.picture && <p>{errors.picture}</p>}
         <button type="submit">Login</button>
       </form>
       <table border="1">
@@ -46,12 +65,14 @@ export const Form = () => {
           </tr>
         </thead>
         <tbody>
-          {userData.map((user, index) => (
-            <tr key={index}>
-              <td>{user.name}</td>
-              <td>{user.password}</td>
-            </tr>
-          ))}
+          {userData.map((item, index) => {
+            return (
+              <tr key={index}>
+                <td>{item.email}</td>
+                <td>{item.password}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>
